@@ -16,7 +16,7 @@ class Send(commands.Cog):
 
         args = list(args)
         view = Confirm()
-        await ctx.send("TEST MSG", view=view)
+        await ctx.reply(f"TEST MSG {str(args)}", view=view)
 
 
 async def setup(bot: commands.Bot) -> None:
