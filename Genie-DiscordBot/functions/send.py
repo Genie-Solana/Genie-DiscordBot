@@ -1,5 +1,6 @@
+import discord
 from discord.ext import commands
-from discord.ui import View
+from component.confirmModal import Confirm
 
 
 class Send(commands.Cog):
@@ -14,8 +15,8 @@ class Send(commands.Cog):
         from_avatar = ctx.author.avatar
 
         args = list(args)
-
-        await ctx.send(f"Hello {from_id}")
+        view = Confirm()
+        await ctx.send("TEST MSG", view=view)
 
 
 async def setup(bot: commands.Bot) -> None:
