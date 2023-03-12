@@ -11,6 +11,7 @@ intents = discord.Intents.all()
 cogs: list = [
     "functions.send",
     "functions.wallet",
+    "functions.dashboard",
 ]
 
 client = commands.Bot(
