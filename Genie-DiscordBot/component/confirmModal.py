@@ -1,21 +1,30 @@
 import discord
+import webbrowser
+from discord.ui import Button
 
 
 class Confirm(discord.ui.View):
-    def __init__(self):
+    def __init__(self, url="", confirm_button_msg="", user=None):
         super().__init__()
-        self.value = None
+        self.url = url
+        self.user = user
 
-    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
-    async def confirm(
-        self, interaction: discord.Interaction, button: discord.ui.Button
-    ):
-        await interaction.response.send_message("Confirming", ephemeral=True)
-        self.value = True
-        self.stop()
+        confirm_button = Button(
+            label=confirm_button_msg, style=discord.ButtonStyle.green
+        )
+        confirm_button.callback = self.confirm_callback
 
-    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.grey)
-    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Cancelling", ephemeral=True)
-        self.value = False
-        self.stop()
+        cancel_button = Button(label="Cancel", style=discord.ButtonStyle.grey)
+        cancel_button.callback = self.cancel_callback
+
+        self.add_item(confirm_button)
+        self.add_item(cancel_button)
+
+    async def confirm_callback(self, interaction):
+        if interaction.user == self.user:
+            await interaction.response.edit_message(view=None)
+            webbrowser.open_new_tab(self.url)
+
+    async def cancel_callback(self, interaction):
+        if interaction.user == self.user:
+            await interaction.response.edit_message(view=None)
