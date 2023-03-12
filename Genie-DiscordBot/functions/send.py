@@ -1,3 +1,4 @@
+import os
 from discord.ext import commands
 from component.confirmModal import Confirm
 
@@ -14,8 +15,21 @@ class Send(commands.Cog):
         from_avatar = ctx.author.avatar
 
         args = list(args)
-        view = Confirm()
-        await ctx.reply(f"TEST MSG {str(args)}", view=view)
+
+        if len(args) == 2 and (args[0] == "token" or args[0] == "nft"):
+            # TODO : Validate args[1] in BE
+
+            view = Confirm(
+                url=f"{os.environ['FRONTEND_ENDPOINT']}/solana/send{args[0]}",
+                confirm_button_msg="Go",
+                user=ctx.author,
+            )
+            await ctx.reply(
+                f"Hey {from_name}#{from_discriminator} ! Go to Genie for sending assets {args[1]} :genie:\n"
+                f"This message disappear after 10 seconds.",
+                view=view,
+                delete_after=10.0,
+            )
 
 
 async def setup(bot: commands.Bot) -> None:
