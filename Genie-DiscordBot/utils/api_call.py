@@ -42,3 +42,26 @@ def create_inbox_account(discord_id, network_name):
     data = data['data']['success']
 
     return data
+
+def get_social_account_info(discord_id):
+    open_bracket = '{'
+    close_bracket = '}'
+    body = f"""
+        query {open_bracket}
+            getSocialAccountInfo (
+                discriminator: "{discord_id}"
+                snsName: "Discord"
+            ) {open_bracket}
+                success
+                pubKey
+                nickname
+            {close_bracket}
+        {close_bracket}
+        """
+
+    response = requests.post(url=BACKEND_ENDPOINT, json={"query": body})
+    data = json.loads(response.text)
+    data = data['data']['success']
+
+    return data
+

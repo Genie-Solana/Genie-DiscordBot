@@ -25,7 +25,7 @@ class Send(commands.Cog):
                 user=ctx.author,
             )
             await ctx.reply(
-                f"Hey {from_name}#{from_discriminator} ! Go to Genie for sending assets {args[1]} :genie:\n"
+                f"Hey {from_name}#{from_discriminator} ! Go to Genie for sending assets to {args[1]} :genie:\n"
                 f"This message disappear after 10 seconds.",
                 view=view,
                 delete_after=10.0,
