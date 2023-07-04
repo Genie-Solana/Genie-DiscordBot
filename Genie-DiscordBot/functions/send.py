@@ -25,7 +25,6 @@ class Send(commands.Cog):
         args = list(args)
         
         if len(args) == 2 and (args[0] == "token" or args[0] == "nft"):
-            # TODO : Validate args[1] in BE
             to_user = discord.utils.get(ctx.message.mentions, id=int(args[1].strip('<@!>')))
 
             if not check_social_account(to_user.id, str(to_user)):

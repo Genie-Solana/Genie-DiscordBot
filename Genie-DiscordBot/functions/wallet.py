@@ -1,6 +1,7 @@
 import os
 from discord.ext import commands
 from component.confirmModal import Confirm
+from utils.api_call import check_social_account
 
 
 class Wallet(commands.Cog):
@@ -21,7 +22,7 @@ class Wallet(commands.Cog):
             return
 
         view = Confirm(
-            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage",
+            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage?snsName=Discord&discordId={from_id}",
             confirm_button_msg="Go",
             user=ctx.author,
         )
@@ -46,7 +47,7 @@ class Wallet(commands.Cog):
             return
 
         view = Confirm(
-            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage",
+            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage?snsName=Discord&discordId={from_id}",
             confirm_button_msg="Go",
             user=ctx.author,
         )
