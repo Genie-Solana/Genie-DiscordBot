@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from component.confirmModal import Confirm
-from utils.api_call import check_social_account
+from utils.api_call import check_social_account, check_inbox_account
 
 
 class Send(commands.Cog):
@@ -27,7 +27,7 @@ class Send(commands.Cog):
         if len(args) == 2 and (args[0] == "token" or args[0] == "nft"):
             to_user = discord.utils.get(ctx.message.mentions, id=int(args[1].strip('<@!>')))
 
-            if not check_social_account(to_user.id, str(to_user)):
+            if not (check_social_account(to_user.id, str(to_user)) and check_inbox_account(to_user.id)):
                 await ctx.reply(
                     "Please try again."
                 )

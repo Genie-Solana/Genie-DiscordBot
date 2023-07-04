@@ -13,6 +13,13 @@ def check_social_account(discord_id, name):
 
     return True
 
+def check_inbox_account(discord_id):
+    if get_inbox_wallet_info(discord_id) is None:
+        pub_key = create_inbox_account(discord_id, "Solana")
+        if pub_key is None:
+            return False
+    return True
+
 def create_social_account(nickname):
     open_bracket = '{'
     close_bracket = '}'
@@ -47,13 +54,18 @@ def create_inbox_account(discord_id, network_name):
                 networkName: "{network_name}"
             ) {open_bracket}
                 success
+                pubKey
             {close_bracket}
         {close_bracket}
         """
 
     response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
     data = json.loads(response.text)
-    data = data['data']['success']
+    
+    try:
+        data = data['data']['createInboxAccount']['pubKey']
+    except:
+        return None
 
     return data
 
@@ -80,6 +92,34 @@ def get_social_account_info(discord_id):
         return None
 
     return data
+
+def get_inbox_wallet_info(discord_id):
+    open_bracket = '{'
+    close_bracket = '}'
+    body = f"""
+        query {open_bracket}
+            getUserInfo (
+                discriminator: "{discord_id}"
+                snsName: "Discord"
+            ) {open_bracket}
+                inboxList {open_bracket}
+                    pubKey
+                    network {open_bracket}
+                        name
+                    {close_bracket}
+                {close_bracket}
+            {close_bracket}
+        {close_bracket}
+        """
+
+    response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
+    data = json.loads(response.text)
+
+    for inbox in data['data']['getUserInfo']['inboxList']:
+        if inbox['network']['name'] == "Solana":
+            return inbox['pubKey']
+
+    return None
 
 def register_sns(address, discord_id, handle, networkName):
     open_bracket = '{'
