@@ -1,4 +1,5 @@
 import os
+import discord
 from discord.ext import commands
 from component.confirmModal import Confirm
 from utils.api_call import check_social_account
@@ -22,12 +23,19 @@ class Send(commands.Cog):
             return
 
         args = list(args)
-
+        
         if len(args) == 2 and (args[0] == "token" or args[0] == "nft"):
             # TODO : Validate args[1] in BE
+            to_user = discord.utils.get(ctx.message.mentions, id=int(args[1].strip('<@!>')))
+
+            if not check_social_account(to_user.id, str(to_user)):
+                await ctx.reply(
+                    "Please try again."
+                )
+                return
 
             view = Confirm(
-                url=f"{os.environ['FRONTEND_ENDPOINT']}/solana/send{args[0]}",
+                url=f"{os.environ['FRONTEND_ENDPOINT']}/solana/send{args[0]}?snsName=Discord&from={from_id}&to={to_user.id}",
                 confirm_button_msg="Go",
                 user=ctx.author,
             )
@@ -38,6 +46,10 @@ class Send(commands.Cog):
                 delete_after=10.0,
             )
 
+        else:
+            await ctx.reply(
+                "Please try again."
+            )
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Send(bot))
