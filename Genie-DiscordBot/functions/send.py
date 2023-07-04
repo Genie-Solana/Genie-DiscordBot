@@ -1,6 +1,7 @@
 import os
 from discord.ext import commands
 from component.confirmModal import Confirm
+from utils.api_call import check_social_account
 
 
 class Send(commands.Cog):
@@ -13,6 +14,12 @@ class Send(commands.Cog):
         from_name = ctx.author.name
         from_discriminator = ctx.author.discriminator
         from_avatar = ctx.author.avatar
+
+        if not check_social_account(from_id, str(ctx.author)):
+            await ctx.reply(
+                "Please try again."
+            )
+            return
 
         args = list(args)
 

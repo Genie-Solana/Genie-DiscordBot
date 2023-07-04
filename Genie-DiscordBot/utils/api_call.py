@@ -3,6 +3,16 @@ import requests
 import json
 
 
+def check_social_account(discord_id, name):
+    if get_social_account_info(discord_id) is None:
+        pub_key = create_social_account(name)
+        if pub_key is None:
+            return False
+        if not register_sns(pub_key, discord_id, name, "Solana"):
+            return False
+
+    return True
+
 def create_social_account(nickname):
     open_bracket = '{'
     close_bracket = '}'
@@ -12,13 +22,17 @@ def create_social_account(nickname):
                 nickname: "{nickname}"
             ) {open_bracket}
                 success
+                pubKey
             {close_bracket}
         {close_bracket}
         """
-
-    response = requests.post(url=BACKEND_ENDPOINT, json={"query": body})
+    response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
     data = json.loads(response.text)
-    data = data['data']['success']
+    
+    try:
+        data = data['data']['createSocialAccount']['pubKey']
+    except:
+        return None
 
     return data
 
@@ -37,7 +51,7 @@ def create_inbox_account(discord_id, network_name):
         {close_bracket}
         """
 
-    response = requests.post(url=BACKEND_ENDPOINT, json={"query": body})
+    response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
     data = json.loads(response.text)
     data = data['data']['success']
 
@@ -52,16 +66,42 @@ def get_social_account_info(discord_id):
                 discriminator: "{discord_id}"
                 snsName: "Discord"
             ) {open_bracket}
-                success
                 pubKey
                 nickname
             {close_bracket}
         {close_bracket}
         """
 
-    response = requests.post(url=BACKEND_ENDPOINT, json={"query": body})
+    response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
     data = json.loads(response.text)
-    data = data['data']['success']
+    try:
+        data = data['data']['getSocialAccountInfo']['pubKey']
+    except:
+        return None
 
+    return data
+
+def register_sns(address, discord_id, handle, networkName):
+    open_bracket = '{'
+    close_bracket = '}'
+    body = f"""
+        mutation {open_bracket}
+            registerSns (
+                address: "{address}"
+                snsName: "Discord"
+                handle: "{handle}"
+                discriminator: "{discord_id}"
+                networkName: "{networkName}"
+            ) {open_bracket}
+                success
+            {close_bracket}
+        {close_bracket}
+        """
+    response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
+    data = json.loads(response.text)
+    try:
+        data = data['data']['registerSns']['success']
+    except:
+        return False
     return data
 

@@ -1,6 +1,7 @@
 import os
 from discord.ext import commands
 from component.confirmModal import Confirm
+from utils.api_call import check_social_account 
 
 
 class Dashboard(commands.Cog):
@@ -13,9 +14,15 @@ class Dashboard(commands.Cog):
         from_name = ctx.author.name
         from_discriminator = ctx.author.discriminator
         from_avatar = ctx.author.avatar
+        
+        if not check_social_account(from_id, str(ctx.author)):
+            await ctx.reply(
+                "Please try again."
+            )
+            return
 
         view = Confirm(
-            url=f"{os.environ['FRONTEND_ENDPOINT']}/dashboard",
+            url=f"{os.environ['FRONTEND_ENDPOINT']}/dashboard?snsName=Discord&discordId={from_id}",
             confirm_button_msg="Go",
             user=ctx.author,
         )
