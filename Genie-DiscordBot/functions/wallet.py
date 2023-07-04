@@ -13,6 +13,12 @@ class Wallet(commands.Cog):
         from_name = ctx.author.name
         from_discriminator = ctx.author.discriminator
         from_avatar = ctx.author.avatar
+        
+        if not check_social_account(from_id, str(ctx.author)):
+            await ctx.reply(
+                "Please try again."
+            )
+            return
 
         view = Confirm(
             url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage",
@@ -32,6 +38,12 @@ class Wallet(commands.Cog):
         from_name = ctx.author.name
         from_discriminator = ctx.author.discriminator
         from_avatar = ctx.author.avatar
+        
+        if not check_social_account(from_id, str(ctx.author)):
+            await ctx.reply(
+                "Please try again."
+            )
+            return
 
         view = Confirm(
             url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage",
