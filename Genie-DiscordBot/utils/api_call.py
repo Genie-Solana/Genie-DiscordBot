@@ -75,7 +75,7 @@ def get_social_account_info(discord_id):
     response = requests.post(url=os.environ['BACKEND_ENDPOINT'], json={"query": body})
     data = json.loads(response.text)
     try:
-        data = data['getSocialAccountInfo']['pubKey']
+        data = data['data']['getSocialAccountInfo']['pubKey']
     except:
         return None
 
