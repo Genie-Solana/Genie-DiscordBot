@@ -44,7 +44,27 @@ class Send(commands.Cog):
                 view=view,
                 delete_after=10.0,
             )
+            
+            view = Confirm(
+                url=f"{os.environ['FRONTEND_ENDPOINT']}/solana/dashboard?snsName=Discord&discordId={to_user.id}",
+                confirm_button_msg="Go",
+                user=to_user,
+            )
 
+            overwrites = {
+                ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                to_user: discord.PermissionOverwrite(read_messages=True)
+            }
+
+            channel = discord.utils.get(ctx.guild.channels, name=f"Genie Alert-{to_user.id}")
+            if not channel:
+                channel = await ctx.guild.create_text_channel(f"Genie Alert-{to_user.id}", overwrites=overwrites)
+            
+            await channel.send(
+                f"<@{ctx.author.id}> just got genie link to send you {args[0]}!\n"
+                f"You can check in your genie dashboard :genie:",
+                view=view,
+            )
         else:
             await ctx.reply(
                 "Please try again."
