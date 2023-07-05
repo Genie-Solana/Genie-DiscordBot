@@ -3,12 +3,12 @@ import requests
 import json
 
 
-def check_social_account(discord_id, name):
+def check_social_account(discord_id, name, profile_img):
     if get_social_account_info(discord_id) is None:
         pub_key = create_social_account(name)
         if pub_key is None:
             return False
-        if not register_sns(pub_key, discord_id, name, "Solana"):
+        if not register_sns(pub_key, discord_id, name, "Solana", profile_img):
             return False
 
     return True
@@ -121,7 +121,7 @@ def get_inbox_wallet_info(discord_id):
 
     return None
 
-def register_sns(address, discord_id, handle, networkName):
+def register_sns(address, discord_id, handle, networkName, profile_img):
     open_bracket = '{'
     close_bracket = '}'
     body = f"""
@@ -132,6 +132,7 @@ def register_sns(address, discord_id, handle, networkName):
                 handle: "{handle}"
                 discriminator: "{discord_id}"
                 networkName: "{networkName}"
+                profileImg: "{profile_img}"
             ) {open_bracket}
                 success
             {close_bracket}
