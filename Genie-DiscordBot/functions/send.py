@@ -46,7 +46,7 @@ class Send(commands.Cog):
             )
             
             view = Confirm(
-                url=f"{os.environ['FRONTEND_ENDPOINT']}/solana/dashboard?snsName=Discord&discordId={to_user.id}",
+                url=f"{os.environ['FRONTEND_ENDPOINT']}/solana/dashboard?snsName=Discord&discriminator={to_user.id}",
                 confirm_button_msg="Go",
                 user=to_user,
             )
