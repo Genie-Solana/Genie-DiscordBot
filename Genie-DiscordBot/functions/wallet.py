@@ -22,7 +22,7 @@ class Wallet(commands.Cog):
             return
 
         view = Confirm(
-            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage?snsName=Discord&discordId={from_id}",
+            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage?snsName=Discord&discriminator={from_id}",
             confirm_button_msg="Go",
             user=ctx.author,
         )
@@ -47,7 +47,7 @@ class Wallet(commands.Cog):
             return
 
         view = Confirm(
-            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage?snsName=Discord&discordId={from_id}",
+            url=f"{os.environ['FRONTEND_ENDPOINT']}/mypage?snsName=Discord&discriminator={from_id}",
             confirm_button_msg="Go",
             user=ctx.author,
         )

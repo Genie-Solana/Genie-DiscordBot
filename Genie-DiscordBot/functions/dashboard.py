@@ -22,7 +22,7 @@ class Dashboard(commands.Cog):
             return
 
         view = Confirm(
-            url=f"{os.environ['FRONTEND_ENDPOINT']}/dashboard?snsName=Discord&discordId={from_id}",
+            url=f"{os.environ['FRONTEND_ENDPOINT']}/dashboard?snsName=Discord&discriminator={from_id}",
             confirm_button_msg="Go",
             user=ctx.author,
         )
