@@ -16,7 +16,7 @@ class Send(commands.Cog):
         from_discriminator = ctx.author.discriminator
         from_avatar = ctx.author.avatar
 
-        if not check_social_account(from_id, str(ctx.author)):
+        if not check_social_account(from_id, str(ctx.author), from_avatar):
             await ctx.reply(
                 "Please try again."
             )
@@ -27,7 +27,7 @@ class Send(commands.Cog):
         if len(args) == 2 and (args[0] == "token" or args[0] == "nft"):
             to_user = discord.utils.get(ctx.message.mentions, id=int(args[1].strip('<@!>')))
 
-            if not (check_social_account(to_user.id, str(to_user)) and check_inbox_account(to_user.id)):
+            if not (check_social_account(to_user.id, str(to_user), to_user.avatar) and check_inbox_account(to_user.id)):
                 await ctx.reply(
                     "Please try again."
                 )

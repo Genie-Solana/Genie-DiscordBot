@@ -15,7 +15,7 @@ class Dashboard(commands.Cog):
         from_discriminator = ctx.author.discriminator
         from_avatar = ctx.author.avatar
         
-        if not check_social_account(from_id, str(ctx.author)):
+        if not check_social_account(from_id, str(ctx.author), from_avatar):
             await ctx.reply(
                 "Please try again."
             )
